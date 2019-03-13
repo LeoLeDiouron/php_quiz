@@ -1,0 +1,66 @@
+h1 {
+    font-weight: normal;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+    text-align: center
+}
+
+td {
+    padding-right: 12px;
+    padding-bottom: 12px;
+}
+
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; 
+}
+
+.button {
+    background-color: #140977cc;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.button_delete {
+    background-color: #861111cc;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.button_blocked {
+    background-color: #474747cc;
+    border: none;
+    color: white;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #24179bcc;
+    cursor: pointer;
+}
+
+.button_delete:hover {
+    background-color: #c22323cc;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
