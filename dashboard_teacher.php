@@ -25,7 +25,7 @@
             echo '<h2>Welcome '.$_SESSION['username'].'</h2>';
         ?>
         <form action="dashboard_teacher.php" method="POST">
-            search a specific student (leave it blank to get all results) : <input type="text" name="student">       
+            search a specific student (leave it blank to get all results) : <input type="text" name="student">
             <input class="button" type="submit" name="button_search" value="search" >
         </form>
         <table>
@@ -61,6 +61,10 @@
                 }
             ?>
         </table>
+
+        <form action="quiz/dashboard_add_quiz.php" method="POST"> 
+            <input class="button" type="submit" name="button_create" value="Create a new quiz" >
+        </form>
 
         <form action="login.php" method="POST"> 
             <input class="button" type="submit" name="button_logout" value="Logout" >

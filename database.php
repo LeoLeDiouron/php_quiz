@@ -45,6 +45,7 @@
         }
         $sql_query = "INSERT INTO ".$table." (".implode(',',$fields).") VALUES (".substr($values_str, 0, strlen($values_str)-1).");";
         $conn->query($sql_query);
+        //echo $sql_query;
         $conn->close();
     }
 
