@@ -16,8 +16,7 @@
             </div>
         </header>
         <?php
-            if (isset($_POST['cpassword_signup']) && !isset($_GET['error_msg'])) {
-                unset($_POST['cpassword_signup']);
+            if (isset($_POST['password_signup']) && !isset($_GET['error_msg'])) {
                 $created_username=$_POST['username_signup'];
                 $created_password=$_POST['password_signup'];
             }
@@ -29,11 +28,11 @@
                     <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone">
                         <div class="mdl-tabs mdl-js-tabs">
                             <div class="mdl-tabs__tab-bar">
-                                <a href="#tab1-panel" class="mdl-tabs__tab <?php echo (isset($_POST['cpassword_signup']) ? '' : 'is-active');?>">Login</a>
-                                <a href="#tab2-panel" class="mdl-tabs__tab <?php echo (isset($_POST['cpassword_signup']) ? 'is-active' : '');?>">Sign Up</a>
+                                <a href="#tab1-panel" class="mdl-tabs__tab <?php echo (isset($created_username) ? '' : 'is-active');?>">Login</a>
+                                <a href="#tab2-panel" class="mdl-tabs__tab <?php echo (isset($created_username) ? 'is-active' : '');?>">Sign Up</a>
                             </div>
 
-                            <div class="mdl-tabs__panel <?php echo (isset($_POST['cpassword_signup']) ? '' : 'is-active');?>" id="tab1-panel">
+                            <div class="mdl-tabs__panel <?php echo (isset($created_username) ? '' : 'is-active');?>" id="tab1-panel">
                                 <form action="login.php" method="POST">
                                     <p class="mdl-textfield mdl-js-textfield">
                                         <input class="mdl-textfield__input" type="text" id="username" name="username" value="<?php echo (isset($created_username) ? $created_username : '') ?>" required>
@@ -83,7 +82,7 @@
                                 ?>
                             </div>
 
-                            <div class="mdl-tabs__panel <?php echo (isset($_POST['cpassword_signup']) ? 'is-active' : '');?>" id="tab2-panel">
+                            <div class="mdl-tabs__panel <?php echo (isset($created_username) ? 'is-active' : '');?>" id="tab2-panel">
                                 <form action="login.php" method="POST">
                                     <p class="mdl-textfield mdl-js-textfield">
                                         <input class="mdl-textfield__input" type="text" id="username_signup" name="username_signup" required>
@@ -95,21 +94,13 @@
                                         <label class="mdl-textfield__label" for="password_signup">Password</label>
                                     </p>
                                     <br>
-                                    <p class="mdl-textfield mdl-js-textfield">
-                                        <input class="mdl-textfield__input" type="password" id="cpassword_signup" name="cpassword_signup" required>
-                                        <label class="mdl-textfield__label" for="cpassword_signup">Confirm password</label>
-                                    </p>
-                                    <br>
                                     <button type="submit" name="button_login" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"> Sign up </button>
                                 </form>
                                 <?php
                                     if ((isset($_POST['username_signup']) && $_POST['username_signup'] != '') &&
-                                        (isset($_POST['password_signup']) && $_POST['password_signup'] != '') &&
-                                        (isset($_POST['cpassword_signup']) && $_POST['cpassword_signup'] != '')) {
+                                        (isset($_POST['password_signup']) && $_POST['password_signup'] != '')) {
                                         
-                                        if (strcmp($_POST['password_signup'], $_POST['cpassword_signup']) !== 0) {
-                                            echo "<p class=\"error\">Passwords are not identical</p>";
-                                        } else {
+                                    
                                             include_once "database.php";
                                             $result = get_datas("SELECT id FROM users WHERE username='".$_POST['username_signup']."'");
     
@@ -119,7 +110,7 @@
                                             } else {
                                                 echo "<p class=\"error\">This username already exists</p>";
                                             }    
-                                        }
+                                        
                                         
                                     }
                                 ?>
