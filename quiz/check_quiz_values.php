@@ -9,7 +9,7 @@
             }
             if (isset($_POST["good_answer_".strval($idx_question)]) == false || $_POST["good_answer_".strval($idx_question)] == "")
                 return false;
-        }
+            }
         return true;
     }
 ?>

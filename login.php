@@ -1,84 +1,134 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- style -->
-        <!-- <link rel="stylesheet" type="text/css" href="style/style.css"> -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css">
-        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-    </head>
-    <body>
-<!-- d -->
 
-        <!-- Always shows a header, even in smaller screens. -->
-        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
         <header class="mdl-layout__header">
             <div class="mdl-layout__header-row">
-            <!-- Title -->
-            <span class="mdl-layout-title">Quiz</span>
-            <!-- Add spacer, to align navigation to the right -->
-            <div class="mdl-layout-spacer"></div>
-            <!-- Navigation. We hide it in small screens. -->
-            <!-- <nav class="mdl-navigation mdl-layout--large-screen-only">
-                <a class="mdl-navigation__link" href="">Logout</a>
-            </nav> -->
+                <span class="mdl-layout-title">Quiz</span>
             </div>
         </header>
+        <?php
+            if (isset($_POST['cpassword_signup']) && !isset($_GET['error_msg'])) {
+                unset($_POST['cpassword_signup']);
+                $created_username=$_POST['username_signup'];
+                $created_password=$_POST['password_signup'];
+            }
+        ?>
         <main class="mdl-layout__content">
             <div class="page-content">
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--5-col mdl-cell--0-col-phone"></div>
-                    <div class="mdl-cell mdl-cell--2-col mdl-cell--12-col-phone">
+                    <div class="mdl-cell mdl-cell--4-col mdl-cell--0-col-phone"></div>
+                    <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-phone">
+                        <div class="mdl-tabs mdl-js-tabs">
+                            <div class="mdl-tabs__tab-bar">
+                                <a href="#tab1-panel" class="mdl-tabs__tab <?php echo (isset($_POST['cpassword_signup']) ? '' : 'is-active');?>">Login</a>
+                                <a href="#tab2-panel" class="mdl-tabs__tab <?php echo (isset($_POST['cpassword_signup']) ? 'is-active' : '');?>">Sign Up</a>
+                            </div>
 
-                    <p>Please login</p>
-                <?php
-                    session_start();
-                    if (isset($_GET['error_msg']))
-                        echo '<p class="error">'.$_GET['error_msg'].'</p>';
-                    else
-                        echo '<br>';
-                    if (isset($_POST['username']) && isset($_POST['password'])) {
-                        include_once "database.php";
-                        if ($_POST['username'] != '' && $_POST['password'] != '') {
-                            $result_users = get_datas("SELECT username, password, is_admin FROM users WHERE username='".$_POST['username']."'");
-                            if ($result_users->num_rows > 0) {
-                                $row = $result_users->fetch_assoc();
-                                if ($row["password"] == $_POST['password']) {
-                                    $_SESSION['username'] = $_POST['username'];
-                                    $_SESSION['password'] = $_POST['password'];
-                                    $_SESSION['is_admin'] = $row['is_admin'];
-                                    if ($_SESSION['is_admin']) {
-                                        header('Location: dashboard_teacher.php');
+                            <div class="mdl-tabs__panel <?php echo (isset($_POST['cpassword_signup']) ? '' : 'is-active');?>" id="tab1-panel">
+                                <form action="login.php" method="POST">
+                                    <p class="mdl-textfield mdl-js-textfield">
+                                        <input class="mdl-textfield__input" type="text" id="username" name="username" value="<?php echo (isset($created_username) ? $created_username : '') ?>" required>
+                                        <label class="mdl-textfield__label" for="username">Username</label>
+                                    </p>
+                                    <br>
+                                    <p class="mdl-textfield mdl-js-textfield">
+                                        <input class="mdl-textfield__input" type="password" id="password" name="password" value="<?php echo (isset($created_password) ? $created_password : '') ?>" required>
+                                        <label class="mdl-textfield__label" for="password">Password</label>
+                                    </p>
+                                    <br>
+                                    <button type="submit" name="button_login" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"> Login </button>
+                                </form>
+                                <?php
+                                    session_start();
+                                    if (isset($_GET['error_msg']))
+                                        echo '<p class="error">'.$_GET['error_msg'].'</p>';
+                                    else
+                                        echo '<br>';
+                                    if (isset($_POST['username']) && isset($_POST['password'])) {
+                                        include_once "database.php";
+                                        if ($_POST['username'] != '' && $_POST['password'] != '') {
+                                            $result_users = get_datas("SELECT username, password, is_admin FROM users WHERE username='".$_POST['username']."'");
+                                            if ($result_users->num_rows > 0) {
+                                                $row = $result_users->fetch_assoc();
+                                                if ($row["password"] == $_POST['password']) {
+                                                    $_SESSION['username'] = $_POST['username'];
+                                                    $_SESSION['password'] = $_POST['password'];
+                                                    $_SESSION['is_admin'] = $row['is_admin'];
+                                                    if ($_SESSION['is_admin']) {
+                                                        header('Location: dashboard_teacher.php');
+                                                    } else {
+                                                        header('Location: dashboard_student.php');
+                                                    }
+                                                } else {
+                                                    header('Location: login.php?error_msg=wrong password');
+                                                }
+                                            } else {
+                                                header('Location: login.php?error_msg=wrong username');
+                                            }
+                                        } else {
+                                            header('Location: login.php?error_msg=no username or password');
+                                        }
                                     } else {
-                                        header('Location: dashboard_student.php');
+                                        session_destroy();
                                     }
-                                } else {
-                                    header('Location: login.php?error_msg=wrong password');
-                                }
-                            } else {
-                                header('Location: login.php?error_msg=wrong username');
-                            }
-                        } else {
-                            header('Location: login.php?error_msg=no username or password');
-                        }
-                    } else {
-                        session_destroy();
-                    }
-                ?>
-                <form action="login.php" method="POST">
-                    username : <input type="text" name="username"><br><br>
-                    password : <input type="password" name="password"><br><br>       
-                    <input class="button" type="submit" name="button_login" value="Login" >
-                </form>
-                <p>Not register yet ? Sign up <a href="./signup.php">here</a> </p>
-                    
+                                ?>
+                            </div>
+
+                            <div class="mdl-tabs__panel <?php echo (isset($_POST['cpassword_signup']) ? 'is-active' : '');?>" id="tab2-panel">
+                                <form action="login.php" method="POST">
+                                    <p class="mdl-textfield mdl-js-textfield">
+                                        <input class="mdl-textfield__input" type="text" id="username_signup" name="username_signup" required>
+                                        <label class="mdl-textfield__label" for="username_signup">Username</label>
+                                    </p>
+                                    <br>
+                                    <p class="mdl-textfield mdl-js-textfield">
+                                        <input class="mdl-textfield__input" type="password" id="password_signup" name="password_signup" required>
+                                        <label class="mdl-textfield__label" for="password_signup">Password</label>
+                                    </p>
+                                    <br>
+                                    <p class="mdl-textfield mdl-js-textfield">
+                                        <input class="mdl-textfield__input" type="password" id="cpassword_signup" name="cpassword_signup" required>
+                                        <label class="mdl-textfield__label" for="cpassword_signup">Confirm password</label>
+                                    </p>
+                                    <br>
+                                    <button type="submit" name="button_login" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored"> Sign up </button>
+                                </form>
+                                <?php
+                                    if ((isset($_POST['username_signup']) && $_POST['username_signup'] != '') &&
+                                        (isset($_POST['password_signup']) && $_POST['password_signup'] != '') &&
+                                        (isset($_POST['cpassword_signup']) && $_POST['cpassword_signup'] != '')) {
+                                        
+                                        if (strcmp($_POST['password_signup'], $_POST['cpassword_signup']) !== 0) {
+                                            echo "<p class=\"error\">Passwords are not identical</p>";
+                                        } else {
+                                            include_once "database.php";
+                                            $result = get_datas("SELECT id FROM users WHERE username='".$_POST['username_signup']."'");
+    
+                                            if ($result->num_rows == 0) {
+                                                insert_datas('users', ['username', 'password', 'is_admin'], ["'".$_POST['username_signup']."'", "'".$_POST['password_signup']."'", false]);
+                                                header('Location: login.php');
+                                            } else {
+                                                echo "<p class=\"error\">This username already exists</p>";
+                                            }    
+                                        }
+                                        
+                                    }
+                                ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
-        </div>
-
-
-<!-- d -->
-    </body>
+    </div>
+</body>
 </html>
